@@ -23,8 +23,7 @@ public class GenerateKeyTest extends BaseTest {
     public void getTextIcon() {
         MainPage page = new MainPage().navigate().shouldBeOpened();
         page.getInfoPic().click();
-        //page.getTextIconElement().shouldHave(cssValue("display", "block"));
-        page.getTextIconElement().isDisplayed();
+        page.getTextIconElement().shouldHave(not(cssValue("display", "none")));
         page.getApplicationUrl().shouldBe(focused);
     }
 
@@ -32,7 +31,6 @@ public class GenerateKeyTest extends BaseTest {
     public Object[][] createUser() {
         return new Object[][]{
                 {"Ivan1", "Ivanov2", "ivanivanov@mail.ru", startsWith("*")},
-                //  {"Ivan1", "Ivanov2", "ivanivanov3@mail.ru", startsWith("*")},
         };
     }
 

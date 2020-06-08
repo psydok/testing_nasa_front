@@ -1,13 +1,18 @@
 package ru.nasa.front.pages;
 
 import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Point;
+import ru.nasa.front.components.Toolbar;
+import ru.nasa.front.components.ToolbarItemMainPage;
 
+import static com.codeborne.selenide.Condition.have;
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.*;
 import static ru.nasa.front.constants.Constants.PAGE_LOAD_TIME;
 
 public class MainPage extends AbstractPage<MainPage> {
+    private Toolbar<ToolbarItemMainPage> toolbar = new Toolbar<>($("#headerContent.usa-nav-primary"), ToolbarItemMainPage::new);
 
     public MainPage() {
         super();
@@ -46,12 +51,6 @@ public class MainPage extends AbstractPage<MainPage> {
         return $("label#infoTab");
     }
 
-    @Override
-    public MainPage waitPageLoaded() {
-        $("div#apidatagov_signup").waitWhile(text("Loading signup form..."), PAGE_LOAD_TIME);
-        return this;
-    }
-
     public SelenideElement getHighlightedElement() {
         return $(".usa-section");
     }
@@ -64,15 +63,22 @@ public class MainPage extends AbstractPage<MainPage> {
         return $("code.signup-key");
     }
 
-    public SelenideElement getListToolbar() {
-        return $("ul.usa-nav-primary");//компонент?
+    public ToolbarItemMainPage getToolbarSelectedItem() {
+        return toolbar.getSelected();
     }
 
-    public SelenideElement getNavigation() {
-        return $(".usa-nav");
+    public ToolbarItemMainPage findLinkToolbar(String toolbarName) {
+        return toolbar.getSectionByName(toolbarName);
     }
 
-    public SelenideElement getLogoNavigation() {
-        return $(".usa-navbar");
+    public Point findPointH2(String name) {
+        SelenideElement h2Title = $$("h2").find(have(text(name)));
+        return h2Title.toWebElement().getLocation();
+    }
+
+    @Override
+    public MainPage waitPageLoaded() {
+        $("div#apidatagov_signup").waitWhile(text("Loading signup form..."), PAGE_LOAD_TIME);
+        return this;
     }
 }

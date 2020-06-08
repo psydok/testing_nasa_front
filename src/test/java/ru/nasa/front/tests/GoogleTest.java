@@ -13,11 +13,11 @@ import static com.codeborne.selenide.Selenide.*;
 @Report
 public class GoogleTest extends BaseTest {
     @Test
-    public void searchSelenideInGoogle() {
+    public void searchNasaApiInGoogle() {
         open("https://google.com/ncr");
-        $(By.name("q")).val("selenide").pressEnter();
+        $(By.name("q")).val("nasa api").pressEnter();
         $$("#search .r").shouldHave(sizeGreaterThan(1));
-        $("#search .r").shouldHave(text("selenide"));
+        $("#search .r").shouldHave(text("NASA"));
     }
 
 }

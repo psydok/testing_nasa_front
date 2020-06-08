@@ -1,0 +1,24 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="FrontTestsNASA" verbose="1" parallel="tests">
+    <parameter name="browser" value="chrome" />
+    <parameter name="screen" value="1024x780" />
+
+    <test name="Register" >
+        <classes>
+            <class name="ru.nasa.front.tests.GenerateKeyTest" />
+        </classes>
+    </test>
+
+    <test name="Toolbar" >
+        <classes>
+            <class name="ru.nasa.front.tests.ToolbarTest" />
+        </classes>
+    </test>
+
+    <test name="Google" >
+        <classes>
+            <class name="ru.nasa.front.tests.GoogleTest" />
+        </classes>
+    </test>
+</suite>

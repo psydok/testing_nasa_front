@@ -111,10 +111,10 @@ public class MainPageSteps extends BaseSteps<MainPage> {
      * @return
      */
     public MainPageSteps checkRequiredMark() {
-        List<String> fields = Arrays.asList(//
-                page.getLabelField("user_first_name").innerText(),
-                page.getLabelField("user_last_name").innerText(),
-                page.getLabelField("user_email").innerText()
+        List<String> fields = Arrays.asList(
+                page.getFNameLabel().innerText(),
+                page.getLNameLabel().innerText(),
+                page.getEmailLabel().innerText()
         );
 
         assertThat(fields, everyItem(startsWith("*")));

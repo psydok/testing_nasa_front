@@ -12,6 +12,9 @@ import static ru.nasa.front.constants.Constants.PAGE_LOAD_TIME;
 
 public class MainPage extends AbstractPage<MainPage> {
     private Toolbar<ToolbarItemMainPage> toolbar = new Toolbar<>($("#headerContent.usa-nav-primary"), ToolbarItemMainPage::new);
+    private final String fName = "user_first_name";
+    private final String lName = "user_last_name";
+    private final String email = "user_email";
 
     public MainPage() {
         super();
@@ -19,15 +22,27 @@ public class MainPage extends AbstractPage<MainPage> {
     }
 
     public SelenideElement getFNameField() {
-        return $("input#user_first_name");
+        return $(String.format("input#%s", fName));
     }
 
     public SelenideElement getLNameField() {
-        return $("input#user_last_name");
+        return $(String.format("input#%s", lName));
     }
 
     public SelenideElement getEmailField() {
-        return $("input#user_email");
+        return $(String.format("input#%s", email));
+    }
+
+    public SelenideElement getFNameLabel() {
+        return $(String.format("label[for=%s]", fName));
+    }
+
+    public SelenideElement getLNameLabel() {
+        return $(String.format("label[for=%s]", lName));
+    }
+
+    public SelenideElement getEmailLabel() {
+        return $(String.format("label[for=%s]", email));
     }
 
     public SelenideElement getApplicationUrl() {
@@ -72,10 +87,6 @@ public class MainPage extends AbstractPage<MainPage> {
 
     public SelenideElement getToolbarSelectedItem() {
         return toolbar.getSelected();
-    }
-
-    public SelenideElement getLabelField(String nameClass) {
-        return $(String.format("label[for=%s]", nameClass));
     }
 
     public ToolbarItemMainPage findLinkToolbar(String toolbarName) {

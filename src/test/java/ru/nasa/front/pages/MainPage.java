@@ -6,8 +6,7 @@ import org.openqa.selenium.Point;
 import ru.nasa.front.components.Toolbar;
 import ru.nasa.front.components.ToolbarItemMainPage;
 
-import static com.codeborne.selenide.Condition.have;
-import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 import static ru.nasa.front.constants.Constants.PAGE_LOAD_TIME;
 
@@ -63,8 +62,16 @@ public class MainPage extends AbstractPage<MainPage> {
         return $("code.signup-key");
     }
 
-    public ToolbarItemMainPage getToolbarSelectedItem() {
+    public SelenideElement getListErrors() {
+        return $("ul.parsley-errors-list");
+    }
+
+    public SelenideElement getToolbarSelectedItem() {
         return toolbar.getSelected();
+    }
+
+    public SelenideElement getLabelField(String nameClass) {
+        return $(String.format("label[for=%s]", nameClass));
     }
 
     public ToolbarItemMainPage findLinkToolbar(String toolbarName) {
@@ -76,9 +83,20 @@ public class MainPage extends AbstractPage<MainPage> {
         return h2Title.toWebElement().getLocation();
     }
 
+
     @Override
     public MainPage waitPageLoaded() {
         $("div#apidatagov_signup").waitWhile(text("Loading signup form..."), PAGE_LOAD_TIME);
+        return this;
+    }
+
+    public MainPage waitPageScrolled() {
+        getToolbarSelectedItem().waitUntil(cssClass("currentDiv"), PAGE_LOAD_TIME);
+        return this;
+    }
+
+    public MainPage waitPageLoadingSignup() {
+        getCodeApiKey().waitUntil(exist, PAGE_LOAD_TIME);
         return this;
     }
 }

@@ -29,10 +29,11 @@ public abstract class AbstractPage<T extends AbstractPage<T>>  {
     }
 
     public T navigate(Class<? extends T> pageClass) {
-        return open(url, pageClass).waitPageLoaded();
+        return open(url, pageClass);
     }
 
     public String getUrl() { return url; }
 
     public abstract T waitPageLoaded();
+
 }

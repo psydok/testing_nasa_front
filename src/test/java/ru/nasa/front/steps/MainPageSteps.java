@@ -2,7 +2,6 @@ package ru.nasa.front.steps;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
-import org.hamcrest.Matcher;
 import ru.nasa.front.components.ToolbarItemMainPage;
 import ru.nasa.front.pages.MainPage;
 
@@ -13,6 +12,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.everyItem;
 
 import static com.codeborne.selenide.Selenide.$;
+import static org.hamcrest.Matchers.startsWith;
 
 public class MainPageSteps extends BaseSteps<MainPage> {
     public MainPageSteps() {
@@ -24,6 +24,16 @@ public class MainPageSteps extends BaseSteps<MainPage> {
         return this;
     }
 
+    public MainPageSteps shouldBeScrolled() {
+        page.waitPageScrolled();
+        return this;
+    }
+
+    public MainPageSteps shouldBeExistCode() {
+        page.waitPageLoadingSignup();
+        return this;
+    }
+
     public MainPageSteps inputRequiredField(String firstName, String lastName, String email) {
         page.getFNameField().setValue(firstName);
         page.getLNameField().setValue(lastName);
@@ -32,7 +42,8 @@ public class MainPageSteps extends BaseSteps<MainPage> {
     }
 
     public MainPageSteps clickOnSignup() {
-        page.getSignupButton().click();
+        page.getSignupButton()
+                .click();
         return this;
     }
 
@@ -42,9 +53,7 @@ public class MainPageSteps extends BaseSteps<MainPage> {
      * @return
      */
     public MainPageSteps checkExistApiKey() {
-        MainPage mainPage = new MainPage();
-        mainPage.shouldBeOpened();
-        $("code.signup-key").shouldBe(Condition.not(Condition.empty));
+        page.getCodeApiKey().shouldBe(Condition.not(Condition.empty));
         return this;
     }
 
@@ -80,8 +89,7 @@ public class MainPageSteps extends BaseSteps<MainPage> {
     public MainPageSteps checkError() {
         SelenideElement error = page.getTextError();
         error.should(Condition.visible);
-        $("ul.parsley-errors-list")
-                .shouldHave(Condition.cssValue("color", "rgba(255, 0, 0, 1)"));
+        page.getListErrors().shouldHave(Condition.cssValue("color", "rgba(255, 0, 0, 1)"));
         error.shouldHave(Condition.text("This value is required"));
         return this;
     }
@@ -92,42 +100,38 @@ public class MainPageSteps extends BaseSteps<MainPage> {
      * @return
      */
     public MainPageSteps checkFieldsSignup() {
-        SelenideElement fNameField = page.getFNameField();
-        SelenideElement lNameField = page.getLNameField();
-        SelenideElement emailField = page.getEmailField();
-        fNameField.shouldBe(Condition.visible);
-        lNameField.shouldBe(Condition.visible);
-        emailField.shouldBe(Condition.visible);
+        page.getFNameField().shouldBe(Condition.visible);
+        page.getLNameField().shouldBe(Condition.visible);
+        page.getEmailField().shouldBe(Condition.visible);
         return this;
     }
 
     /**
      * Обязательные поля в регистрации имеют метку
      *
-     * @param mark метка
      * @return
      */
-    public MainPageSteps checkRequiredMark(Matcher<String> mark) {
-        List<String> fields = Arrays.asList(
-                $("label[for=user_first_name]").innerText(),
-                $("label[for=user_last_name]").innerText(),
-                $("label[for=user_email]").innerText()
+    public MainPageSteps checkRequiredMark() {
+        List<String> fields = Arrays.asList(//
+                page.getLabelField("user_first_name").innerText(),
+                page.getLabelField("user_last_name").innerText(),
+                page.getLabelField("user_email").innerText()
         );
 
-        assertThat(fields, everyItem(mark));
+        assertThat(fields, everyItem(startsWith("*")));
         return this;
     }
 
     /**
-     * Проверка подсветки выбранного элемента в toolbar-е
+     * Проверка, что таргет веделения на выбранном элементе в toolbar-е
      *
      * @param item Элемент toolbar-а
      * @return
      */
-    public MainPageSteps checkHighlightedSelectedItem(ToolbarItemMainPage item) {
+    public MainPageSteps checkTargetSelectedItem(ToolbarItemMainPage item) {
         SelenideElement selenideElement = item.getItemA();
         selenideElement.shouldHave(Condition.cssClass("currentDiv"));
-        selenideElement.shouldBe(Condition.cssValue("background-color", "rgba(91, 97, 107, 1)"));
+
         return this;
     }
 

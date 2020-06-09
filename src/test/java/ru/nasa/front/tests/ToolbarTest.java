@@ -1,15 +1,17 @@
 package ru.nasa.front.tests;
 
+import com.codeborne.selenide.testng.annotations.Report;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import ru.nasa.front.BaseTest;
 import ru.nasa.front.components.ToolbarItemMainPage;
 import ru.nasa.front.steps.MainPageSteps;
 
-import static com.codeborne.selenide.Selenide.sleep;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+@Test
+@Report
 public class ToolbarTest extends BaseTest {
     @DataProvider(name = "toolbar")
     public Object[][] createListToolbar() {
@@ -32,10 +34,12 @@ public class ToolbarTest extends BaseTest {
         ToolbarItemMainPage item = mainPageSteps.getPage()
                 .findLinkToolbar(itemToolbar)
                 .select();
-        mainPageSteps.checkHighlightedSelectedItem(item);
+        mainPageSteps.checkTargetSelectedItem(item);
 
         int yTitle = mainPageSteps.getPage().findPointH2(title).y;
-        sleep(2000);
+
+        mainPageSteps.shouldBeScrolled();
+
         int yItem = item.getLocationItem().y;
         Integer abs = Math.abs(yItem - yTitle);
         //расстояние между итемом с тулбара и заголовком не отличается больше чем на 100

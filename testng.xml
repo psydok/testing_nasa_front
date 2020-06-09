@@ -4,11 +4,6 @@
     <parameter name="browser" value="chrome" />
     <parameter name="screen" value="1024x780" />
 
-    <test name="Register" >
-        <classes>
-            <class name="ru.nasa.front.tests.GenerateKeyTest" />
-        </classes>
-    </test>
 
     <test name="Toolbar" >
         <classes>

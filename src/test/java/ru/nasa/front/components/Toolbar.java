@@ -1,6 +1,5 @@
 package ru.nasa.front.components;
 
-import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.ElementsContainer;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
@@ -22,9 +21,9 @@ public class Toolbar<T extends ElementsContainer> extends ElementsContainer {
         return toolbarItem;
     }
 
-    public T getSelected() {
-        T toolbarItem = toolbarItemConstructor.get();
-        toolbarItem.setSelf(getSelf().find(".currentDiv"));
-        return toolbarItem;
+    public SelenideElement getSelected() {
+       // T toolbarItem = toolbarItemConstructor.get();
+      //  toolbarItem.setSelf(getSelf().find(".currentDiv"));
+        return getSelf().find(".currentDiv");
     }
 }

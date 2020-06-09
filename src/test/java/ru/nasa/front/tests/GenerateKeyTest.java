@@ -2,16 +2,15 @@ package ru.nasa.front.tests;
 
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.testng.annotations.Report;
-import org.hamcrest.Matcher;
-import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import ru.nasa.front.BaseTest;
 import ru.nasa.front.pages.MainPage;
 import ru.nasa.front.steps.MainPageSteps;
 
+import java.util.Random;
+
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.sleep;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -27,25 +26,45 @@ public class GenerateKeyTest extends BaseTest {
         page.getApplicationUrl().shouldBe(focused);
     }
 
-    @DataProvider(name = "user")
-    public Object[][] createUser() {
+    @DataProvider(name = "newUser")
+    public Object[][] createNewUser() {
+        Random random = new Random();
         return new Object[][]{
-                {"Ivan1", "Ivanov2", "ivanivanov@mail.ru", startsWith("*")},
+                {
+                        "Ivan" + random.nextInt(999),
+                        "Ivanov" + random.nextInt(999),
+                        "inewtesting" + random.nextInt(999) + "@mail.ru"
+                },
         };
     }
 
-    @Test(dataProvider = "user")
-    public void getApiKey(String firstName, String lastName, String email, Matcher<String> mark) {
+    @DataProvider(name = "user")
+    public Object[][] createUser() {
+        Random random = new Random();
+        int digit = random.nextInt(999);
+        return new Object[][]{
+                {
+                        "Ivan" + digit,
+                        "Ivanov" + digit,
+                        "inotsametesting" + digit + "@mail.ru"
+                },
+        };
+    }
+
+    @Test(dataProvider = "newUser")
+    public void getApiKey(String firstName, String lastName, String email) {
         MainPageSteps mainPageSteps = new MainPageSteps();
         mainPageSteps.openMainPage()
                 .checkFieldsSignup()
-                .checkRequiredMark(mark)
+                .checkRequiredMark()
                 .checkButtonSignup();
 
         mainPageSteps.inputRequiredField(firstName, lastName, email)
                 .clickOnSignup()
+                .shouldBeExistCode()
                 .checkExistApiKey();
-        mainPageSteps.checkApiKeyHighlighted();
+        mainPageSteps
+                .checkApiKeyHighlighted();
     }
 
     private String getCode(String firstName, String lastName, String email) {
@@ -53,20 +72,16 @@ public class GenerateKeyTest extends BaseTest {
         mainPageSteps.openMainPage();
 
         mainPageSteps.inputRequiredField(firstName, lastName, email)
-                .clickOnSignup();
-        sleep(5000);
+                .clickOnSignup()
+                .shouldBeExistCode();
         SelenideElement apiKey = mainPageSteps.getPage().getCodeApiKey();
-        sleep(15000);
         return apiKey.text();
     }
 
     @Test(dataProvider = "user")
-    public void getSameApiKey(String firstName, String lastName, String email, Matcher<String> mark) {
+    public void getNotSameApiKey(String firstName, String lastName, String email) {
         String apiKey = getCode(firstName, lastName, email);
-        sleep(5000);
         String newApiKey = getCode(firstName, lastName, email);
-        sleep(5000);
-
         assertThat(apiKey, not(newApiKey));
     }
 
@@ -75,7 +90,7 @@ public class GenerateKeyTest extends BaseTest {
         MainPageSteps mainPageSteps = new MainPageSteps();
         mainPageSteps.openMainPage()
                 .checkFieldsSignup()
-                .checkRequiredMark(startsWith("*"))
+                .checkRequiredMark()
                 .checkButtonSignup();
 
         mainPageSteps.clickOnSignup()
@@ -84,11 +99,11 @@ public class GenerateKeyTest extends BaseTest {
     }
 
     @Test(dataProvider = "user")
-    public void getApiKeyWithEmptyField(String firstName, String lastName, String email, Matcher<String> mark) {
+    public void getApiKeyWithEmptyField(String firstName, String lastName, String email) {
         MainPageSteps mainPageSteps = new MainPageSteps();
         mainPageSteps.openMainPage()
                 .checkFieldsSignup()
-                .checkRequiredMark(mark)
+                .checkRequiredMark()
                 .checkButtonSignup();
 
         mainPageSteps.inputRequiredField(firstName, "", email)

@@ -62,6 +62,10 @@ public class MainPage extends AbstractPage<MainPage> {
         return $("code.signup-key");
     }
 
+    public SelenideElement getHeaderNav() {
+        return $("#headerNav.usa-nav");
+    }
+
     public SelenideElement getListErrors() {
         return $("ul.parsley-errors-list");
     }

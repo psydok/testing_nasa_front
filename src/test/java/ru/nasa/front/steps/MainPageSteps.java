@@ -11,7 +11,6 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.everyItem;
 
-import static com.codeborne.selenide.Selenide.$;
 import static org.hamcrest.Matchers.startsWith;
 
 public class MainPageSteps extends BaseSteps<MainPage> {
@@ -141,8 +140,7 @@ public class MainPageSteps extends BaseSteps<MainPage> {
      * @return
      */
     public MainPageSteps checkNavigationToRight() {
-        $("#headerNav.usa-nav")
-                .shouldBe(Condition.cssValue("float", "right"));
+        page.getHeaderNav().shouldBe(Condition.cssValue("float", "right"));
         return this;
     }
 }
